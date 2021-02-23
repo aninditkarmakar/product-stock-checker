@@ -47,15 +47,32 @@ export class ProductPage {
 	}
 
 	async checkStock(): Promise<boolean> {
+		let domChanged = false;
 		try {
-			const selector = await this._page.waitForSelector(`xpath=/${this._config.xpath}`);
-			const innerText = await selector.textContent();
-			this._logger.info(`[${this._id}] Inner text : ${innerText}`);
+			try {
+				await this._page.waitForSelector(`xpath=/${this._config.xpath}`);
+			} catch (err) {
+				if ((err.message as string).indexOf('Timeout') !== -1 && (err.message as string).indexOf('exceeded') !== -1) {
+					this._logger.warn(`[${this._id}] DOM Changed.`);
+					domChanged = true;
+				} else {
+					throw err;
+				}
+			}
 
-			if (!innerText || innerText.toLowerCase() !== this._config.unavailableIndicator.toLowerCase()) {
+			if (domChanged) {
 				await this._notifer.notifySuccess(this._config.vendor, this._config.product, this._config.url);
-				this._logger.info(`[${this._id}] Notification sent.`);
+				this._logger.info(`[${this._id}] Notification sent due to DOM change.`);
 				return true;
+			} else {
+				const selector = await this._page.waitForSelector(`xpath=/${this._config.xpath}`);
+				const innerText = await selector.textContent();
+				this._logger.info(`[${this._id}] Inner text : ${innerText}`);
+				if (!innerText || innerText.toLowerCase() !== this._config.unavailableIndicator.toLowerCase()) {
+					await this._notifer.notifySuccess(this._config.vendor, this._config.product, this._config.url);
+					this._logger.info(`[${this._id}] Notification sent.`);
+					return true;
+				}
 			}
 		} catch (err) {
 			throw new ProductPageError(`Error checking for stock.`, err);
