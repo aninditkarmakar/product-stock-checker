@@ -61,7 +61,7 @@ async function handleErrors(config: Config, results: (0 | Error)[], notifier: IN
 
 	await writeErrors(filePaths.errorsFile, consolidatedErrors);
 
-	if (consolidatedErrors.length > 0 && startTime.getUTCMinutes() % 21 === 0) {
+	if (consolidatedErrors.length > 0 && startTime.getUTCMinutes() % 20 === 0) {
 		try {
 			await notifier.notifyError(consolidatedErrors.length);
 			logger.info(`Notified about errors.`);
