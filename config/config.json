@@ -13,6 +13,13 @@
 			"url": "https://www.bestbuy.com/site/nvidia-geforce-rtx-3070-8gb-gddr6-pci-express-4-0-graphics-card-dark-platinum-and-black/6429442.p?skuId=6429442",
 			"xpath": "html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[7]/div[1]/div/div/div/button",
 			"unavailableIndicator": "Sold Out"
+		},
+		{
+			"vendor": "NewEgg",
+			"product": "GIGABYTE RTX 3070",
+			"url": "https://www.newegg.com/gigabyte-geforce-rtx-3070-gv-n3070eagle-8gd/p/N82E16814932344?Item=N82E16814932344",
+			"xpath": "html/body/div[6]/div[2]/div[1]/div/div/div[1]/div[1]/div[3]/div/div[2]/p",
+			"unavailableIndicator": "This product is temporarily out of stock because of high demand, we will replenish it as soon as possible."
 		}
 	]
 }
