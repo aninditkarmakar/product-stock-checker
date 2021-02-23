@@ -5,6 +5,7 @@ import { ProductPage } from './ProductPage';
 import { IftttNotifier, INotifier } from './Notifier';
 import { Config, ErrorItem, PageConfig } from './utils';
 import { firefox } from '../node_modules/playwright/index';
+import asyncPool from 'tiny-async-pool';
 
 const startTime = new Date();
 const filePaths = {
@@ -76,7 +77,7 @@ async function doChecks(config: Config, notifier: INotifier) {
 	logger.info('Browser opened');
 	const context = await browser.newContext({ ignoreHTTPSErrors: false });
 
-	const promises = config.pages.map(async (pageConfig, idx) => {
+	const iteratorFn = async (pageConfig: PageConfig, idx: number) => {
 		try {
 			const page = await context.newPage();
 			const productPage = new ProductPage(page, { id: idx, logger, pageConfig, notifier });
@@ -88,9 +89,13 @@ async function doChecks(config: Config, notifier: INotifier) {
 			logger.error(err);
 			return new Error(err);
 		}
+	};
+
+	const results = await asyncPool(5, config.pages, (pageConfig: PageConfig) => {
+		const idx = config.pages.indexOf(pageConfig);
+		return iteratorFn(pageConfig, idx);
 	});
 
-	const results = await Promise.all(promises);
 	await browser.close();
 
 	await handleErrors(config, results, notifier);
