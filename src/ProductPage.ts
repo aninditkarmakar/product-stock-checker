@@ -37,6 +37,39 @@ export class ProductPage {
 		this._notifer = options.notifier;
 	}
 
+	private logInfo(msg: string) {
+		this._logger.info(`[${this._id}] ${msg}`);
+	}
+
+	private logWarn(msg: string) {
+		this._logger.warn(`[${this._id}] ${msg}`);
+	}
+
+	private logError(msg: string) {
+		this._logger.error(`[${this._id}] ${msg}`);
+	}
+
+	private async waitForSelector(xpath: string) {
+		let retries = 3;
+		while (retries > 0) {
+			try {
+				this._logger.info(`[${this._id}] Waiting for selector.`);
+				const selector = await this._page.waitForSelector(xpath);
+				this.logInfo(`Selector loaded.`);
+				retries = 0;
+				return selector;
+			} catch (err) {
+				if ((err.message as string).indexOf('Timeout') !== -1 && (err.message as string).indexOf('exceeded') !== -1) {
+					retries--;
+					this.logInfo(`Refreshing page and waiting for selector. ${retries > 0 ? `${retries} retries left.` : ''}`);
+					await this.navigate();
+				}
+			}
+		}
+
+		throw new ProductPageError(`[${this._id}] waitForSelector Timeout`);
+	}
+
 	async navigate() {
 		try {
 			await this._page.goto(this._config.url);
@@ -51,9 +84,9 @@ export class ProductPage {
 		let selector: pw.ElementHandle<SVGElement | HTMLElement> | undefined;
 		try {
 			try {
-				selector = await this._page.waitForSelector(`xpath=/${this._config.xpath}`);
+				selector = await this.waitForSelector(`xpath=/${this._config.xpath}`);
 			} catch (err) {
-				if ((err.message as string).indexOf('Timeout') !== -1 && (err.message as string).indexOf('exceeded') !== -1) {
+				if (err instanceof ProductPageError && err.message.indexOf('Timeout') !== -1) {
 					this._logger.warn(`[${this._id}] DOM Changed.`);
 					domChanged = true;
 				} else {
@@ -65,6 +98,7 @@ export class ProductPage {
 				this._logger.info(`[${this._id}] Notification sent due to DOM change.`);
 				return true;
 			} else if (selector) {
+				this.logInfo(`Waiting for textContext`);
 				const innerText = await selector.textContent();
 				this._logger.info(`[${this._id}] Inner text : ${innerText}`);
 				if (!innerText || innerText.toLowerCase() !== this._config.unavailableIndicator.toLowerCase()) {
@@ -80,5 +114,9 @@ export class ProductPage {
 		}
 
 		return false;
+	}
+
+	async closePage(): Promise<void> {
+		await this._page.close();
 	}
 }

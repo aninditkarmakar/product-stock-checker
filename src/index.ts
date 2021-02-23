@@ -4,7 +4,7 @@ import { FileLogger, ILogger } from './Logger';
 import { ProductPage } from './ProductPage';
 import { IftttNotifier, INotifier } from './Notifier';
 import { Config, ErrorItem, PageConfig } from './utils';
-import { firefox } from '../node_modules/playwright/index';
+import { chromium, firefox } from '../node_modules/playwright/index';
 import asyncPool from 'tiny-async-pool';
 
 const startTime = new Date();
@@ -73,20 +73,26 @@ async function handleErrors(config: Config, results: (0 | Error)[], notifier: IN
 }
 
 async function doChecks(config: Config, notifier: INotifier) {
-	const browser = await firefox.launch({ headless: true });
+	const browser = await chromium.launch({ headless: true });
 	logger.info('Browser opened');
-	const context = await browser.newContext({ ignoreHTTPSErrors: false });
+	const context = await browser.newContext({
+		ignoreHTTPSErrors: false,
+		userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4412.0 Safari/537.36 Edg/90.0.796.0',
+	});
 
 	const iteratorFn = async (pageConfig: PageConfig, idx: number) => {
+		const page = await context.newPage();
+		const productPage = new ProductPage(page, { id: idx, logger, pageConfig, notifier });
+
 		try {
-			const page = await context.newPage();
-			const productPage = new ProductPage(page, { id: idx, logger, pageConfig, notifier });
 			await productPage.navigate();
 			await productPage.checkStock();
+			await productPage.closePage();
 			return 0;
 		} catch (err) {
 			logger.error(`Error encountered for product at index ${idx}.`);
 			logger.error(err);
+			await productPage.closePage();
 			return new Error(err);
 		}
 	};
