@@ -59,7 +59,7 @@ async function handleErrors(config: Config, results: (0 | Error)[], notifier: IN
 		}),
 	);
 
-	await writeErrors(filePaths.errorsFile, consolidatedErrors);
+	consolidatedErrors.length > 0 ?? (await writeErrors(filePaths.errorsFile, consolidatedErrors));
 
 	if (consolidatedErrors.length > 0 && startTime.getUTCMinutes() % 20 === 0) {
 		try {
