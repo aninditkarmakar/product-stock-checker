@@ -1,0 +1,21 @@
+{
+	"eslint.validate": ["typescript", "javascript"],
+	"[javascript]": {
+		"editor.formatOnSave": true
+	},
+	"[typescript]": {
+		"editor.formatOnSave": true
+	},
+	"[json]": {
+		"editor.quickSuggestions": {
+			"strings": true
+		},
+		"editor.suggest.insertMode": "replace",
+		"gitlens.codeLens.scopes": [
+			"document"
+		],
+		"editor.formatOnSave": true
+	},
+	"editor.formatOnSave": false,
+	"editor.defaultFormatter": "esbenp.prettier-vscode"
+}
