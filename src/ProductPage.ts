@@ -48,9 +48,10 @@ export class ProductPage {
 
 	async checkStock(): Promise<boolean> {
 		let domChanged = false;
+		let selector: pw.ElementHandle<SVGElement | HTMLElement> | undefined;
 		try {
 			try {
-				await this._page.waitForSelector(`xpath=/${this._config.xpath}`);
+				selector = await this._page.waitForSelector(`xpath=/${this._config.xpath}`);
 			} catch (err) {
 				if ((err.message as string).indexOf('Timeout') !== -1 && (err.message as string).indexOf('exceeded') !== -1) {
 					this._logger.warn(`[${this._id}] DOM Changed.`);
@@ -60,12 +61,10 @@ export class ProductPage {
 				}
 			}
 
-			if (domChanged) {
-				await this._notifer.notifySuccess(this._config.vendor, this._config.product, this._config.url);
+			if (domChanged && selector === undefined) {
 				this._logger.info(`[${this._id}] Notification sent due to DOM change.`);
 				return true;
-			} else {
-				const selector = await this._page.waitForSelector(`xpath=/${this._config.xpath}`);
+			} else if (selector) {
 				const innerText = await selector.textContent();
 				this._logger.info(`[${this._id}] Inner text : ${innerText}`);
 				if (!innerText || innerText.toLowerCase() !== this._config.unavailableIndicator.toLowerCase()) {
@@ -73,6 +72,8 @@ export class ProductPage {
 					this._logger.info(`[${this._id}] Notification sent.`);
 					return true;
 				}
+			} else {
+				throw new ProductPageError(`Unknown Error.`);
 			}
 		} catch (err) {
 			throw new ProductPageError(`Error checking for stock.`, err);
