@@ -87,8 +87,9 @@ export class ProductPage {
 		let selector: pw.ElementHandle<SVGElement | HTMLElement> | undefined;
 		try {
 			try {
-				const selectorSearches = [this._page.waitForSelector(`xpath=/${this._config.xpath}`), this._page.waitForSelector(this._config.selector)];
-				selector = await Promise.race(selectorSearches);
+				//const selectorSearches = [this._page.waitForSelector(`xpath=/${this._config.xpath}`), this._page.waitForSelector(this._config.selector)];
+				//selector = await Promise.race(selectorSearches);
+				selector = await this._page.waitForSelector(this._config.selector);
 			} catch (err) {
 				if (err instanceof ProductPageError && err.message.indexOf('Timeout') !== -1) {
 					this._logger.warn(`[${this._id}] DOM Changed.`);
