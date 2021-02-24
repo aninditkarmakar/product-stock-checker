@@ -101,6 +101,7 @@ export class ProductPage {
 			}
 
 			if (domChanged && !selector) {
+				await this._notifer.notifySuccess(this._config.vendor, this._config.product, this._config.url);
 				this._logger.info(`[${this._id}] Notification sent due to DOM change.`);
 				return true;
 			} else if (selector) {
