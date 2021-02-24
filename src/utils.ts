@@ -2,6 +2,7 @@ export interface PageConfig {
 	vendor: string;
 	url: string;
 	xpath: string;
+	selector: string;
 	unavailableIndicator: string;
 	product: string;
 }

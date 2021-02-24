@@ -5,6 +5,7 @@
 			"product": "GIGABYTE RTX 3070",
 			"url": "https://www.bestbuy.com/site/gigabyte-nvidia-geforce-rtx-3070-eagle-8gb-gddr6-pci-express-4-0-graphics-card/6437912.p?skuId=6437912",
 			"xpath": "html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[7]/div[1]/div/div/div/button",
+			"selector": "#fulfillment-add-to-cart-button-64797182 > div > div > div > button",
 			"unavailableIndicator": "Sold Out"
 		},
 		{
@@ -12,6 +13,7 @@
 			"product": "RTX 3070 FE",
 			"url": "https://www.bestbuy.com/site/nvidia-geforce-rtx-3070-8gb-gddr6-pci-express-4-0-graphics-card-dark-platinum-and-black/6429442.p?skuId=6429442",
 			"xpath": "html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[7]/div[1]/div/div/div/button",
+			"selector": "#fulfillment-add-to-cart-button-64797182 > div > div > div > button",
 			"unavailableIndicator": "Sold Out"
 		},
 		{
@@ -19,6 +21,7 @@
 			"product": "GIGABYTE RTX 3070 OC",
 			"url": "https://www.bestbuy.com/site/gigabyte-nvidia-geforce-rtx-3070-gaming-oc-8gb-gddr6-pci-express-4-0-graphics-card/6437909.p?skuId=6437909",
 			"xpath": "html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[7]/div[1]/div/div/div/button",
+			"selector": "#fulfillment-add-to-cart-button-64797182 > div > div > div > button",
 			"unavailableIndicator": "Sold Out"
 		},
 		{
@@ -26,6 +29,7 @@
 			"product": "GIGABYTE RTX 3060 Ti OC",
 			"url": "https://www.bestbuy.com/site/gigabyte-nvidia-geforce-rtx-3060-ti-gaming-oc-8g-gddr6-pci-express-4-0-graphics-card-black/6442484.p?skuId=6442484",
 			"xpath": "html/body/div[3]/main/div[2]/div[3]/div[2]/div/div/div[7]/div[1]/div/div/div/button",
+			"selector": "#fulfillment-add-to-cart-button-64797182 > div > div > div > button",
 			"unavailableIndicator": "Sold Out"
 		},
 		{
@@ -33,6 +37,7 @@
 			"product": "GIGABYTE RTX 3070",
 			"url": "https://www.newegg.com/gigabyte-geforce-rtx-3070-gv-n3070eagle-8gd/p/N82E16814932344",
 			"xpath": "html/body/div[6]/div[2]/div[1]/div/div/div[1]/div[1]/div[3]/div/div[2]/p",
+			"selector": "#app > div.page-content > div.page-section > div > div > div.row-side > div.product-buy-box > div.message.message-note > div > div.message-information > p",
 			"unavailableIndicator": "This product is temporarily out of stock because of high demand, we will replenish it as soon as possible."
 		},
 		{
@@ -40,13 +45,15 @@
 			"product": "GIGABYTE RTX 3070 OC",
 			"url": "https://www.newegg.com/gigabyte-geforce-rtx-3070-gv-n3070eagle-oc-8gd/p/N82E16814932343",
 			"xpath": "html/body/div[6]/div[2]/div[1]/div/div/div[1]/div[1]/div[3]/div/div[2]/p",
+			"selector": "#app > div.page-content > div.page-section > div > div > div.row-side > div.product-buy-box > div.message.message-note > div > div.message-information > p",
 			"unavailableIndicator": "This product is temporarily out of stock because of high demand, we will replenish it as soon as possible."
 		},
 		{
 			"vendor": "NewEgg",
 			"product": "GIGABYTE RTX 3060 Ti OC",
 			"url": "https://www.newegg.com/gigabyte-geforce-rtx-3060-ti-gv-n306tgaming-oc-8gd/p/N82E16814932377",
-			"xpath": "html/body/div[6]/div[2]/div[1]/div/div/div[1]/div[1]/div[3]/div/div[2]/p",
+			"xpath": "html/body/div[7]/div[2]/div[1]/div/div/div[1]/div[1]/div[3]/div/div[2]/p",
+			"selector": "#app > div.page-content > div.page-section > div > div > div.row-side > div.product-buy-box > div.message.message-note > div > div.message-information > p",
 			"unavailableIndicator": "This product is temporarily out of stock because of high demand, we will replenish it as soon as possible."
 		},
 		{
@@ -54,6 +61,7 @@
 			"product": "EVGA RTX 3060 Ti",
 			"url": "https://www.newegg.com/evga-geforce-rtx-3060-ti-08g-p5-3667-kr/p/N82E16814487537",
 			"xpath": "html/body/div[6]/div[2]/div[1]/div/div/div[1]/div[1]/div[3]/div/div[2]/p",
+			"selector": "#app > div.page-content > div.page-section > div > div > div.row-side > div.product-buy-box > div.message.message-note > div > div.message-information > p",
 			"unavailableIndicator": "This product is temporarily out of stock because of high demand, we will replenish it as soon as possible."
 		}
 	]

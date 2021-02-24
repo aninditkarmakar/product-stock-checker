@@ -1,4 +1,5 @@
 import * as pw from 'playwright';
+import { selectors } from 'playwright';
 import { ILogger } from './Logger';
 import { IftttNotifier, INotifier } from './Notifier';
 import { PageConfig } from './utils';
@@ -49,16 +50,18 @@ export class ProductPage {
 		this._logger.error(`[${this._id}] ${msg}`);
 	}
 
-	private async waitForSelector(xpath: string) {
+	private async waitForSelector(selStr: string) {
 		let retries = 3;
+		let error: any;
 		while (retries > 0) {
 			try {
 				this._logger.info(`[${this._id}] Waiting for selector.`);
-				const selector = await this._page.waitForSelector(xpath);
+				const selector = this._page.waitForSelector(selStr);
 				this.logInfo(`Selector loaded.`);
 				retries = 0;
 				return selector;
 			} catch (err) {
+				error = err;
 				if ((err.message as string).indexOf('Timeout') !== -1 && (err.message as string).indexOf('exceeded') !== -1) {
 					retries--;
 					this.logInfo(`Refreshing page and waiting for selector. ${retries > 0 ? `${retries} retries left.` : ''}`);
@@ -67,7 +70,7 @@ export class ProductPage {
 			}
 		}
 
-		throw new ProductPageError(`[${this._id}] waitForSelector Timeout`);
+		throw new ProductPageError(`[${this._id}] waitForSelector Timeout`, error);
 	}
 
 	async navigate() {
@@ -84,7 +87,8 @@ export class ProductPage {
 		let selector: pw.ElementHandle<SVGElement | HTMLElement> | undefined;
 		try {
 			try {
-				selector = await this.waitForSelector(`xpath=/${this._config.xpath}`);
+				const selectorSearches = [this._page.waitForSelector(`xpath=/${this._config.xpath}`), this._page.waitForSelector(this._config.selector)];
+				selector = await Promise.race(selectorSearches);
 			} catch (err) {
 				if (err instanceof ProductPageError && err.message.indexOf('Timeout') !== -1) {
 					this._logger.warn(`[${this._id}] DOM Changed.`);

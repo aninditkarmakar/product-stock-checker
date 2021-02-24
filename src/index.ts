@@ -6,6 +6,7 @@ import { IftttNotifier, INotifier } from './Notifier';
 import { Config, ErrorItem, PageConfig } from './utils';
 import { chromium, firefox } from '../node_modules/playwright/index';
 import asyncPool from 'tiny-async-pool';
+const random_ua = require('modern-random-ua');
 
 const startTime = new Date();
 const filePaths = {
@@ -73,15 +74,38 @@ async function handleErrors(config: Config, results: (0 | Error)[], notifier: IN
 }
 
 async function doChecks(config: Config, notifier: INotifier) {
-	const browser = await chromium.launch({ headless: true });
+	const ua = random_ua.generate();
+
+	logger.info(`Random UA: ${ua}`);
+
+	const browser = await chromium.launch({ headless: false });
 	logger.info('Browser opened');
 	const context = await browser.newContext({
 		ignoreHTTPSErrors: false,
-		userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4412.0 Safari/537.36 Edg/90.0.796.0',
+		userAgent: ua,
+		// viewport: {
+		// 	width: 1024 + Math.floor(Math.random() * 100),
+		// 	height: 768 + Math.floor(Math.random() * 100),
+		// },
 	});
 
 	const iteratorFn = async (pageConfig: PageConfig, idx: number) => {
 		const page = await context.newPage();
+		await context.clearCookies();
+		// await page.route('**/*', (route) => {
+		// 	const block = ['tracking', 'collect?', 'bestbuy.com/bf/'];
+		// 	if (
+		// 		route.request().method().toLowerCase() === 'post' &&
+		// 		block.reduce((prev, curr) => {
+		// 			return prev || route.request().url().indexOf(curr) !== -1;
+		// 		}, false)
+		// 	) {
+		// 		logger.info(`[${idx}] Aboring request with url: ${route.request().url()}`);
+		// 		return route.abort();
+		// 	}
+		// 	return route.continue();
+		// });
+
 		const productPage = new ProductPage(page, { id: idx, logger, pageConfig, notifier });
 
 		try {
