@@ -75,7 +75,7 @@ export class ProductPage {
 
 	async navigate() {
 		try {
-			await this._page.goto(this._config.url, { waitUntil: 'networkidle' });
+			await this._page.goto(this._config.url, { waitUntil: 'domcontentloaded' });
 			this._logger.info(`[${this._id}] Loaded website.`);
 		} catch (err: any) {
 			throw new ProductPageError(`Error navigating to website.`, err);
