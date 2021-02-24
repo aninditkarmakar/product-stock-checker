@@ -121,7 +121,7 @@ async function doChecks(config: Config, notifier: INotifier) {
 		}
 	};
 
-	const results = await asyncPool(2, config.pages, (pageConfig: PageConfig) => {
+	const results = await asyncPool(5, config.pages, (pageConfig: PageConfig) => {
 		const idx = config.pages.indexOf(pageConfig);
 		return iteratorFn(pageConfig, idx);
 	});
