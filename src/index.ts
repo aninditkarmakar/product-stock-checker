@@ -15,6 +15,7 @@ const filePaths = {
 	logDir: path.join(__dirname, '../out/logs'),
 	errorsFile: path.join(__dirname, '../out/logs/errors.json'),
 };
+const asyncCount = 3;
 
 const logger: ILogger = FileLogger.getInstance({ dirname: filePaths.logDir });
 
@@ -121,7 +122,7 @@ async function doChecks(config: Config, notifier: INotifier) {
 		}
 	};
 
-	const results = await asyncPool(5, config.pages, (pageConfig: PageConfig) => {
+	const results = await asyncPool(asyncCount, config.pages, (pageConfig: PageConfig) => {
 		const idx = config.pages.indexOf(pageConfig);
 		return iteratorFn(pageConfig, idx);
 	});
