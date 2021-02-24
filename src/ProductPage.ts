@@ -28,6 +28,7 @@ export class ProductPage {
 	private _config: PageConfig;
 	private _page: pw.Page;
 	private _notifer: INotifier;
+	private _timeout = 60000;
 
 	constructor(page: pw.Page, options: ProductPageOptions) {
 		this._id = options.id;
@@ -75,7 +76,7 @@ export class ProductPage {
 
 	async navigate() {
 		try {
-			await this._page.goto(this._config.url, { waitUntil: 'domcontentloaded' });
+			await this._page.goto(this._config.url, { waitUntil: 'domcontentloaded', timeout: this._timeout });
 			this._logger.info(`[${this._id}] Loaded website.`);
 		} catch (err: any) {
 			throw new ProductPageError(`Error navigating to website.`, err);
@@ -84,12 +85,12 @@ export class ProductPage {
 
 	async checkStock(): Promise<boolean> {
 		let domChanged = false;
-		let selector: pw.ElementHandle<SVGElement | HTMLElement> | undefined;
+		let selector: pw.ElementHandle<SVGElement | HTMLElement> | null | undefined;
 		try {
 			try {
 				//const selectorSearches = [this._page.waitForSelector(`xpath=/${this._config.xpath}`), this._page.waitForSelector(this._config.selector)];
 				//selector = await Promise.race(selectorSearches);
-				selector = await this._page.waitForSelector(this._config.selector);
+				selector = await this._page.waitForSelector(this._config.selector, { timeout: this._timeout });
 			} catch (err) {
 				if (err instanceof ProductPageError && err.message.indexOf('Timeout') !== -1) {
 					this._logger.warn(`[${this._id}] DOM Changed.`);
@@ -99,7 +100,7 @@ export class ProductPage {
 				}
 			}
 
-			if (domChanged && selector === undefined) {
+			if (domChanged && !selector) {
 				this._logger.info(`[${this._id}] Notification sent due to DOM change.`);
 				return true;
 			} else if (selector) {

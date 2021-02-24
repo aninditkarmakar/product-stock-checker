@@ -74,7 +74,7 @@ async function handleErrors(config: Config, results: (0 | Error)[], notifier: IN
 }
 
 async function doChecks(config: Config, notifier: INotifier) {
-	const browser = await chromium.launch({ headless: false });
+	const browser = await chromium.launch({ headless: true });
 	logger.info('Browser opened');
 	const context = await browser.newContext({
 		ignoreHTTPSErrors: false,
