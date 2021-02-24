@@ -105,7 +105,7 @@ export class ProductPage {
 				return true;
 			} else if (selector) {
 				this.logInfo(`Waiting for textContext`);
-				const innerText = await selector.textContent();
+				const innerText = (await selector.textContent())?.trim();
 				this._logger.info(`[${this._id}] Inner text : ${innerText}`);
 				if (!innerText || innerText.toLowerCase() !== this._config.unavailableIndicator.toLowerCase()) {
 					await this._notifer.notifySuccess(this._config.vendor, this._config.product, this._config.url);
