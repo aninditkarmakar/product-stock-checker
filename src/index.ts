@@ -78,7 +78,7 @@ async function doChecks(config: Config, notifier: INotifier) {
 
 	logger.info(`Random UA: ${ua}`);
 
-	const browser = await chromium.launch({ headless: true });
+	const browser = await chromium.launch({ headless: false });
 	logger.info('Browser opened');
 	const context = await browser.newContext({
 		ignoreHTTPSErrors: false,
