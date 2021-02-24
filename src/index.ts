@@ -6,7 +6,6 @@ import { IftttNotifier, INotifier } from './Notifier';
 import { Config, ErrorItem, PageConfig } from './utils';
 import { chromium, firefox } from '../node_modules/playwright/index';
 import asyncPool from 'tiny-async-pool';
-const random_ua = require('modern-random-ua');
 
 const startTime = new Date();
 const filePaths = {
@@ -75,10 +74,6 @@ async function handleErrors(config: Config, results: (0 | Error)[], notifier: IN
 }
 
 async function doChecks(config: Config, notifier: INotifier) {
-	const ua = random_ua.generate();
-
-	logger.info(`Random UA: ${ua}`);
-
 	const browser = await chromium.launch({ headless: false });
 	logger.info('Browser opened');
 	const context = await browser.newContext({
