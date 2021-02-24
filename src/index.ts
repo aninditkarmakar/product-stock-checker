@@ -78,11 +78,11 @@ async function doChecks(config: Config, notifier: INotifier) {
 
 	logger.info(`Random UA: ${ua}`);
 
-	const browser = await chromium.launch({ headless: false });
+	const browser = await chromium.launch({ headless: true });
 	logger.info('Browser opened');
 	const context = await browser.newContext({
 		ignoreHTTPSErrors: false,
-		userAgent: ua,
+		//userAgent: ua,
 		// viewport: {
 		// 	width: 1024 + Math.floor(Math.random() * 100),
 		// 	height: 768 + Math.floor(Math.random() * 100),
